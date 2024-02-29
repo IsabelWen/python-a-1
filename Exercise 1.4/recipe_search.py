@@ -33,7 +33,8 @@ def search_ingredient(data):
                 display_recipe(recipe)
 
 # Main code
-filename = input("Enter the filename where you've stored your recipe: ")
+filename = input("Enter the filename where you've stored your recipe (without extension): ")
+filename = filename + '.bin'
 
 try:
     file = open(filename, "rb")
