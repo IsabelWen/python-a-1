@@ -1,4 +1,5 @@
 import pickle
+import sys
 
 # Define a function to take recipes.
 def take_recipe():
@@ -6,13 +7,12 @@ def take_recipe():
     cooking_time = int(input("Enter the cooking time of the recipe in min: "))
     ingredients = input("Enter ingredients (separated by comma): ").split(', ')
     difficulty = calc_difficulty(cooking_time, ingredients)
-    recipe = {
+    return {
         "name": name,
         "cooking_time": cooking_time,
         "ingredients": ingredients,
         "difficulty": difficulty
     }
-    return recipe
 
 # Define a function to calculate recipe difficulty.
 def calc_difficulty(cooking_time, ingredients):
@@ -30,7 +30,8 @@ def calc_difficulty(cooking_time, ingredients):
     return difficulty
 
 # Main Code
-filename = input("Enter the filename for your recipe: ")
+filename = input("Enter the filename for your recipe (without extension): ")
+filename = filename + '.bin'
 try:
     file = open(filename, "rb")
     data = pickle.load(file)
@@ -42,10 +43,7 @@ except FileNotFoundError:
     }
 except:
     print("An unexpected error occurred.")
-    data = {
-        "recipes_list": [],
-        "all_ingredients": []
-    }
+    sys.exit(1)
 else:
     file.close()
 finally:
