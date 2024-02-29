@@ -1,4 +1,5 @@
 import pickle
+import sys
 
 # Define a function to display a recipe
 def display_recipe(recipe):
@@ -25,6 +26,7 @@ def search_ingredient(data):
         print("The number you chose is not in the list.")
     except:
         print("An unexpected error occurred.")
+        sys.exit(1)
     else:
         for recipe in recipes_list:
             if ingredient_searched in recipe["ingredients"]:
@@ -40,6 +42,7 @@ except FileNotFoundError:
     print("File doesn't exist")
 except:
     print("An unexpected error occurred.")
+    sys.exit(1)
 else:
     search_ingredient(data)
     file.close()
