@@ -39,7 +39,7 @@ class Recipe:
     # Getter method for difficulty
     def get_difficulty(self):
         if not self.difficulty:
-            self.difficulty = self.calculate_difficulty()
+            self.calculate_difficulty()
         return self.difficulty
     
     # Setter method for name
