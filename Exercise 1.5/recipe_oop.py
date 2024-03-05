@@ -10,22 +10,20 @@ class Recipe:
 
 
     # Calculating the difficulty level of the recipe
-    def calculate_difficulty(self, cooking_time, ingredients):
-        ingredients_len = len(ingredients)
+    def calculate_difficulty(self):
+        ingredients_len = len(self.ingredients)
 
-        if cooking_time < 10 and ingredients_len < 4:
-            difficulty = "Easy"
-        elif cooking_time < 10 and ingredients_len > 4:
-            difficulty = "Medium"
-        elif cooking_time >= 10 and ingredients_len < 4:
-            difficulty = "Intermediate"
-        elif cooking_time >= 10 and ingredients_len > 4:
-            difficulty = "Hard"
+        if self.cooking_time < 10 and ingredients_len < 4:
+            self.difficulty = "Easy"
+        elif self.cooking_time < 10 and ingredients_len > 4:
+            self.difficulty = "Medium"
+        elif self.cooking_time >= 10 and ingredients_len < 4:
+            self.difficulty = "Intermediate"
+        elif self.cooking_time >= 10 and ingredients_len > 4:
+            self.difficulty = "Hard"
         else:
             print("Not able to calculate difficulty")
         
-        return difficulty
-
     # Getter method for name
     def get_name(self):
         return self.name
@@ -41,7 +39,7 @@ class Recipe:
     # Getter method for difficulty
     def get_difficulty(self):
         if not self.difficulty:
-            self.difficulty = self.calculate_difficulty(self.cooking_time, self.ingredients)
+            self.difficulty = self.calculate_difficulty()
         return self.difficulty
     
     # Setter method for name
