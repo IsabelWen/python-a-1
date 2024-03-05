@@ -58,31 +58,27 @@ class Recipe:
         self.update_all_ingredients()
 
     # Method for updating the all ingridients list
-    def update_all_ingredients(self, all_ingredients):
+    def update_all_ingredients(self):
         for ingredient in self.ingredients:
-            if ingredient not in all_ingredients:
-                all_ingredients.append(ingredient)
+            if ingredient not in self.all_ingredients:
+                self.all_ingredients.append(ingredient)
 
     # Method to check if an ingredient is in the recipe
     def search_ingredient(self, ingredient):
         return ingredient in self.ingredients
         
     # Method to print recipe
-    def view_recipe(self):
-        print("\n Recipe:", self.name)
-        print("------------------------")
-        print("Cooking time (min): " + str(self.cooking_time) + "\n" +  "Diffulty: " + self.get_difficulty() + "\n" + "Ingredients:")
-        for ingredient in self.ingredients:
-            print(ingredient)
+    def __str__(self):
+        return f"\n Recipe: {self.name}\n------------------------\nCooking time (min): {self.cooking_time}\nDifficulty: {self.get_difficulty()}\nIngredients: {', '.join(self.ingredients)}"
     
 # Method to find recipes that contain a specific ingredient
 def recipe_search(data, search_term):
     found = False
-    print("\nRecipes found with the ingredient:", search_term)
+    print("\n\nRecipes found with the ingredient:", search_term)
     print("---------------------------------------------")
     for recipe in data:
         if recipe.search_ingredient(search_term):
-            recipe.view_recipe()
+            print(str(recipe))
             found = True
     if not found:
         print("Coundn't find", search_term)
@@ -113,7 +109,7 @@ recipes_list = [tea, coffee, cake, banana_smoothie]
 
 # Print all recipes
 for recipe in recipes_list:
-    recipe.view_recipe()
+    print(str(recipe))
 
 # Search recipes ingredients
 recipe_search(recipes_list, "Water")
