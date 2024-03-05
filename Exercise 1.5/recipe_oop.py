@@ -5,6 +5,10 @@ class Recipe:
         self.cooking_time = int(0)
         self.difficulty = ""
 
+    # all_ingredients as class variable
+    all_ingredients = []
+
+
     # Calculating the difficulty level of the recipe
     def calculate_difficulty(self, cooking_time, ingredients):
         ingredients_len = len(ingredients)
@@ -53,9 +57,8 @@ class Recipe:
         self.ingredients.extend(items)
         self.update_all_ingredients()
 
-    # Method for updating the all ingreidents list
-    def update_all_ingredients(self):
-        all_ingredients = []
+    # Method for updating the all ingridients list
+    def update_all_ingredients(self, all_ingredients):
         for ingredient in self.ingredients:
             if ingredient not in all_ingredients:
                 all_ingredients.append(ingredient)
