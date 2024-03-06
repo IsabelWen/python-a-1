@@ -106,16 +106,16 @@ def search_recipe(conn, cursor):
         print(f"Ingredient {position}: {ingredient}")
 
     try:
-        ingredient_index = input("Enter the the numbers of the ingredient you would like to search for (comma-separated): ").split(", ")
+        ingredient_indexes = input("Enter the the numbers of the ingredient you would like to search for (comma-separated): ").split(", ")
         search_ingredient = []
-        for index in ingredient_index:
+        for index in ingredient_indexes:
             ingredient_index = int(index)
             if ingredient_index < len(all_ingredients):
                 search_ingredient.append(all_ingredients[ingredient_index])
-            else:
-                print("The number you chose is not in the list.\n")
     except ValueError:
         print("One or more of your inputs aren't numbers.\n")
+    except IndexError:
+        print("The number you chose is not in the list.\n")
     except:
         print("An unexpected error occurred.\n")
         sys.exit(1)
