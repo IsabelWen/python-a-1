@@ -26,6 +26,7 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Recipes (
                difficulty   VARCHAR(20)
 )''')
 
+
 # Loop to run the main menu
 def main_menu(conn, cursor):
     choice = ""
@@ -69,6 +70,7 @@ def create_recipe(conn, cursor):
     conn.commit()
     print("Recipe successfully added.\n")
 
+
 # Calculate recipe difficulty
 def calc_difficulty(cooking_time, ingredients):
     ingredients_len = len(ingredients)
@@ -86,28 +88,28 @@ def calc_difficulty(cooking_time, ingredients):
 
     return difficulty
 
+
 # Definition for operation: Search for recipe
 def search_recipe(conn, cursor):
     cursor.execute("SELECT ingredients FROM Recipes")
     results = cursor.fetchall()
     all_ingredients = []
-    if len(results) > 0:
-        for result in results:
-            ingredients = result[0].split(", ")
-            for ingredient in ingredients:
-                if ingredient not in all_ingredients:
-                    all_ingredients.append(ingredient)
-        for position, ingredient in enumerate(all_ingredients):
-            print(f"Ingredient {position}: {ingredient}")
-    else:
+    if len(results) == 0:
         print("There are no recipes yet.\n")
-        return
+        
+    for result in results:
+        ingredients = result[0].split(", ")
+        for ingredient in ingredients:
+            if ingredient not in all_ingredients:
+                all_ingredients.append(ingredient)
+    for position, ingredient in enumerate(all_ingredients):
+        print(f"Ingredient {position}: {ingredient}")
 
     try:
         ingredient_index = input("Enter the the numbers of the ingredient you would like to search for (comma-separated): ").split(", ")
         search_ingredient = []
         for index in ingredient_index:
-            ingredient_index = int(index.strip())
+            ingredient_index = int(index)
             if ingredient_index < len(all_ingredients):
                 search_ingredient.append(all_ingredients[ingredient_index])
             else:
@@ -132,26 +134,28 @@ def search_recipe(conn, cursor):
 
 
 
+
 # Definition for operation: Update existing recipe
 def update_recipe(conn, cursor):
     cursor.execute("SELECT * FROM Recipes")
     results = cursor.fetchall()
-    if len(results) > 0:
-        for row in results:
-            print("ID: ", row[0])
-            print("Name: ", row[1])
-            print("Ingredients: ", row[2])
-            print("Cooking Time: ", row[3])
-            print("Difficulty:", row[4] + "\n")
-    else:
+    if len(results) == 0:
         print("There are no recipes yet.\n")
         return
+    
+    for row in results:
+        print("ID: ", row[0])
+        print("Name: ", row[1])
+        print("Ingredients: ", row[2])
+        print("Cooking Time: ", row[3])
+        print("Difficulty:", row[4] + "\n")
     
     # Enter what to update
     try:
         recipe_id = int(input("Enter the the id of the recipe you would like to update: "))
         column = input("Enter the the name of the column you would like to update (name, cooking_time or ingredients): ")
-        if column != "cooking_time" and column != "name" and column != "ingredients":
+        valid_columns = ["name", "cooking_time", "ingredients"]
+        if column not in valid_columns:
             print("You need to write 'cooking_time', 'name', or 'ingredients.\n")
             return
         update_value = input(f"Enter the new value for {column}: ")
@@ -180,20 +184,21 @@ def update_recipe(conn, cursor):
         print("Unexpected error\n")
         sys.exit(1)
 
+
 # Definition for operation: Delete a recipe
 def  delete_recipe(conn, cursor):
     cursor.execute("SELECT * FROM Recipes")
     results = cursor.fetchall()
-    if len(results) > 0:
-        for row in results:
-            print("ID: ", row[0])
-            print("Name: ", row[1])
-            print("Ingredients: ", row[2])
-            print("Cooking Time: ", row[3])
-            print("Difficulty:", row[4] + "\n")
-    else:
+    if len(results) == 0:
         print("There are no recipes yet.\n")
         return
+    
+    for row in results:
+        print("ID: ", row[0])
+        print("Name: ", row[1])
+        print("Ingredients: ", row[2])
+        print("Cooking Time: ", row[3])
+        print("Difficulty:", row[4] + "\n")
     
     try:
         recipe_id = int(input("Enter the the id of the recipe you would like to delete: "))
