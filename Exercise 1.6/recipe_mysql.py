@@ -74,7 +74,7 @@ def create_recipe(conn, cursor):
 # Calculate recipe difficulty
 def calc_difficulty(cooking_time, ingredients):
     ingredients_len = len(ingredients)
-
+    difficulty = ""
     if cooking_time < 10 and ingredients_len < 4:
         difficulty = "Easy"
     elif cooking_time < 10 and ingredients_len >= 4:
@@ -83,8 +83,6 @@ def calc_difficulty(cooking_time, ingredients):
         difficulty = "Intermediate"
     elif cooking_time >= 10 and ingredients_len >= 4:
         difficulty = "Hard"
-    else:
-        print("Not able to calculate difficulty of this recipe.")
 
     return difficulty
 
