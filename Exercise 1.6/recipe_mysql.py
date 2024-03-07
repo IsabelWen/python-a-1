@@ -66,7 +66,8 @@ def create_recipe(conn, cursor):
 
     ingredients_string = ", ".join(ingredients)
 
-    cursor.execute("INSERT INTO Recipes (name, ingredients, cooking_time, difficulty) VALUES (%s, %s, %s, %s)", (name, ingredients_string, cooking_time, difficulty))
+    insert_query = "INSERT INTO Recipes (name, ingredients, cooking_time, difficulty) VALUES (%s, %s, %s, %s)"
+    cursor.execute(insert_query, (name, ingredients_string, cooking_time, difficulty))
     conn.commit()
     print("Recipe successfully added.\n")
 
@@ -105,7 +106,7 @@ def search_recipe(conn, cursor):
         print(f"Ingredient {position}: {ingredient}")
 
     try:
-        ingredient_indexes = input("Enter the the numbers of the ingredient you would like to search for (comma-separated): ").split(", ")
+        ingredient_indexes = input("Enter the numbers of the ingredient you would like to search for (comma-separated): ").split(", ")
         search_ingredient = []
         for index in ingredient_indexes:
             ingredient_index = int(index)
@@ -167,16 +168,17 @@ def update_recipe(conn, cursor):
     # Update accordingly
     try:
         cursor.execute(f"UPDATE Recipes SET {column} = %s WHERE id = %s", (update_value, recipe_id))
+        difficulty_query = "UPDATE Recipes SET difficulty = %s WHERE id = %s"
         if column == "cooking_time":
             cursor.execute("SELECT ingredients FROM Recipes WHERE id = %s", (recipe_id,))
             result = cursor.fetchone()
             ingredients = result[0]
-            cursor.execute("UPDATE Recipes SET difficulty = %s WHERE id = %s", (calc_difficulty(int(update_value), ingredients.split(", ")), recipe_id))
+            cursor.execute(difficulty_query, (calc_difficulty(int(update_value), ingredients.split(", ")), recipe_id))
         elif column == "ingredients":
             cursor.execute("SELECT cooking_time FROM Recipes WHERE id = %s", (recipe_id,))
             result = cursor.fetchone()
             cooking_time = result[0]
-            cursor.execute("UPDATE Recipes SET difficulty = %s WHERE id = %s", (calc_difficulty(cooking_time, update_value.split(", ")), recipe_id))
+            cursor.execute(difficulty_query, (calc_difficulty(cooking_time, update_value.split(", ")), recipe_id))
         conn.commit()
         print("Recipe successfully updated.\n")
     except:
