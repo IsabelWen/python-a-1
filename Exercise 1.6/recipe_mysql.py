@@ -92,10 +92,11 @@ def calc_difficulty(cooking_time, ingredients):
 # Definition for operation: Search for recipe
 def search_recipe(conn, cursor):
     cursor.execute("SELECT ingredients FROM Recipes")
-    results = cursor.fetchall()
-    all_ingredients = []
+    results = cursor.fetchall() # duplicate code
     if len(results) == 0:
         print("There are no recipes yet.\n")
+
+    all_ingredients = []
         
     for result in results:
         ingredients = result[0].split(", ")
@@ -138,12 +139,12 @@ def search_recipe(conn, cursor):
 # Definition for operation: Update existing recipe
 def update_recipe(conn, cursor):
     cursor.execute("SELECT * FROM Recipes")
-    results = cursor.fetchall()
+    results = cursor.fetchall() # duplicate code
     if len(results) == 0:
         print("There are no recipes yet.\n")
         return
     
-    for row in results:
+    for row in results: # duplicate code
         print("ID: ", row[0])
         print("Name: ", row[1])
         print("Ingredients: ", row[2])
@@ -188,12 +189,12 @@ def update_recipe(conn, cursor):
 # Definition for operation: Delete a recipe
 def  delete_recipe(conn, cursor):
     cursor.execute("SELECT * FROM Recipes")
-    results = cursor.fetchall()
+    results = cursor.fetchall() # duplicate code
     if len(results) == 0:
         print("There are no recipes yet.\n")
         return
     
-    for row in results:
+    for row in results: # duplicate code
         print("ID: ", row[0])
         print("Name: ", row[1])
         print("Ingredients: ", row[2])
