@@ -87,11 +87,25 @@ def calc_difficulty(cooking_time, ingredients):
 
     return difficulty
 
+# Helper function
+def helper_func(cursor):
+    cursor.execute("SELECT * FROM Recipes")
+    results = cursor.fetchall()
+    if len(results) == 0:
+        print("There are no recipes yet.\n")
+        return
+    
+    for row in results:
+        print("ID: ", row[0])
+        print("Name: ", row[1])
+        print("Ingredients: ", row[2])
+        print("Cooking Time: ", row[3])
+        print("Difficulty:", row[4] + "\n")
 
 # Definition for operation: Search for recipe
 def search_recipe(conn, cursor):
     cursor.execute("SELECT ingredients FROM Recipes")
-    results = cursor.fetchall() # duplicate code
+    results = cursor.fetchall()
     if len(results) == 0:
         print("There are no recipes yet.\n")
 
@@ -133,22 +147,9 @@ def search_recipe(conn, cursor):
                 print("Diffculty:", row[4] + "\n")
 
 
-
-
 # Definition for operation: Update existing recipe
 def update_recipe(conn, cursor):
-    cursor.execute("SELECT * FROM Recipes")
-    results = cursor.fetchall() # duplicate code
-    if len(results) == 0:
-        print("There are no recipes yet.\n")
-        return
-    
-    for row in results: # duplicate code
-        print("ID: ", row[0])
-        print("Name: ", row[1])
-        print("Ingredients: ", row[2])
-        print("Cooking Time: ", row[3])
-        print("Difficulty:", row[4] + "\n")
+    helper_func(cursor)
     
     # Enter what to update
     try:
@@ -188,18 +189,7 @@ def update_recipe(conn, cursor):
 
 # Definition for operation: Delete a recipe
 def  delete_recipe(conn, cursor):
-    cursor.execute("SELECT * FROM Recipes")
-    results = cursor.fetchall() # duplicate code
-    if len(results) == 0:
-        print("There are no recipes yet.\n")
-        return
-    
-    for row in results: # duplicate code
-        print("ID: ", row[0])
-        print("Name: ", row[1])
-        print("Ingredients: ", row[2])
-        print("Cooking Time: ", row[3])
-        print("Difficulty:", row[4] + "\n")
+    helper_func(cursor)
     
     try:
         recipe_id = int(input("Enter the the id of the recipe you would like to delete: "))
