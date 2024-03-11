@@ -247,7 +247,7 @@ class Menu(Recipe):
         session.commit()
         print("\nRecipe successfully updated.\n")
 
-    # option 5: Delete recipe
+    # Option 5: Delete recipe
     def delete_recipe(self):
         recipe_id = self.choose_recipe_id()
         if recipe_id is None: return
