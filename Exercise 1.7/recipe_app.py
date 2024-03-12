@@ -35,7 +35,7 @@ class Recipe(Base):
     def __str__(self):
         return (
             f"\nRecipe: {self.name}\n"
-            f"---------------\n"
+            f"{'-' * 25}\n"
             f"Ingredients: {self.ingredients}\n"
             f"Cooking time (in min): {self.cooking_time}\n"
             f"Difficulty: {self.difficulty}\n\n"
@@ -53,8 +53,6 @@ class Recipe(Base):
             self.difficulty = "Intermediate"
         elif self.cooking_time >= 10 and ingredients_len >= 4:
             self.difficulty = "Hard"
-
-        return self.difficulty
     
     # Define method to retrieve the ingredients string
     def return_ingredients_as_list(self):
@@ -113,7 +111,7 @@ class Menu(Recipe):
         if ingredients_number.isnumeric() == False or int(ingredients_number) <= 0:
             print("\nYou need to enter a positive number.\n")
             return None
-        for i in range(int(ingredients_number)):
+        for _ in range(int(ingredients_number)):
             ingredient = input("Enter one ingredient and hit Enter: ")
             if ingredient != "":
                 ingredients.append(ingredient)
@@ -154,13 +152,12 @@ class Menu(Recipe):
             search_ingredients = []
             for index in ingredient_indexes:
                 ingredient_index = int(index)
-                if ingredient_index < len(all_ingredients):
-                    search_ingredients.append(all_ingredients[ingredient_index])
-                else:
-                    print("\nThe number you chose is not in the list.\n")
-                    return 
+                search_ingredients.append(all_ingredients[ingredient_index])
         except ValueError:
             print("\nOne or more of your inputs aren't numbers.\n")
+            return
+        except IndexError:
+            print("\nThe number you chose is not in the list.\n")
             return
         except:
             print("An unexpected error occurred.\n")
@@ -174,7 +171,7 @@ class Menu(Recipe):
         if len(filtered_recipes) <= 0:
             print("\nThere are no recipes containing all of the ingredients.\n")
         else:
-            print("\nquiRecipe(s) containing the ingredient(s):\n")
+            print("\nRecipe(s) containing the ingredient(s):\n")
             for filtered_recipe in filtered_recipes:
                 print(filtered_recipe)
 
@@ -242,8 +239,8 @@ class Menu(Recipe):
             print(f"\nThe number {attribute} was not an option.\n")
             return None
 
-        new_difficulty = recipe_to_edit.calculate_difficulty()
-        session.query(Recipe).filter(Recipe.id == recipe_id).update({Recipe.difficulty: new_difficulty})
+        if attribute == 2 or attribute == 3:
+            recipe_to_edit.calculate_difficulty()
         session.commit()
         print("\nRecipe successfully updated.\n")
 
