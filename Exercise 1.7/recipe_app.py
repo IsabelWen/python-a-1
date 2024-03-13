@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column
 from sqlalchemy.types import Integer, String
 import sys
+from enum import Enum
 
 # Connecting SQLAlchemy with Your Database
 engine = create_engine("mysql://cf-python:password@localhost/task_database")
@@ -15,6 +16,13 @@ Base = declarative_base()
 # Creating a session
 Session = sessionmaker(bind=engine)
 session = Session()
+
+#set my enum const
+class Difficulty_Enum(Enum):
+    Easy = "Easy"
+    Medium = "Medium"
+    Intermediate = "Intermediate"
+    Hard = "Hard"
 
 # Create table on database
 class Recipe(Base):
@@ -46,20 +54,17 @@ class Recipe(Base):
         ingredients_len = len(self.ingredients.split(", "))
         self.difficulty = ""
         if self.cooking_time < 10 and ingredients_len < 4:
-            self.difficulty = "Easy"
+            self.difficulty = Difficulty_Enum["Easy"].name
         elif self.cooking_time < 10 and ingredients_len >= 4:
-            self.difficulty = "Medium"
+            self.difficulty = Difficulty_Enum["Medium"].name
         elif self.cooking_time >= 10 and ingredients_len < 4:
-            self.difficulty = "Intermediate"
+            self.difficulty = Difficulty_Enum["Intermediate"].name
         elif self.cooking_time >= 10 and ingredients_len >= 4:
-            self.difficulty = "Hard"
+            self.difficulty = Difficulty_Enum["Hard"].name
     
     # Define method to retrieve the ingredients string
     def return_ingredients_as_list(self):
-        if self.ingredients == "":
-            return []
-        else:
-            return self.ingredients.split(", ")
+        return [] if self.ingredients == "" else self.ingredients.split(", ")
     
 Base.metadata.create_all(engine)
 
@@ -89,7 +94,7 @@ class Menu(Recipe):
         if len(name) > 50:
             print("\nRecipe name must be under 50 characters.\n")
             return None
-        elif not all(x.isalnum() or x.isspace() for x in name):
+        elif not name.replace(" ", "").isalnum():
             print("\nInvalid input. Please enter a name containing only letters and numbers.\n")
             return None
         else:
@@ -97,12 +102,12 @@ class Menu(Recipe):
         
     # Recipe cooking time input
     def cooking_time_input(self):
-        cooking_time = input("Enter the cooking time of the recipe in min: ")
-        if cooking_time.isnumeric() == False:
+        try:
+            cooking_time = int(input("Enter the cooking time of the recipe in min: "))
+            return cooking_time          
+        except ValueError:
             print("\nThe cooking time needs to be a number\n")
             return None
-        else:
-            return int(cooking_time)
 
     # Recipe ingredients input
     def ingredients_input(self):
@@ -165,7 +170,7 @@ class Menu(Recipe):
 
         conditions = []
         for search_ingredient in search_ingredients:
-            like_term = "%" + search_ingredient + "%"
+            like_term = f"%{search_ingredient}%"
             conditions.append(Recipe.ingredients.like(like_term))
         filtered_recipes  = session.query(Recipe).filter(*conditions).all()
         if len(filtered_recipes) <= 0:
